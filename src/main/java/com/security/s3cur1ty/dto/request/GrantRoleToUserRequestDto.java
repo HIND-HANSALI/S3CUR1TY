@@ -1,2 +1,15 @@
-package com.security.s3cur1ty.dto.request;public class GrantRoleToUserRequestDto {
+package com.security.s3cur1ty.dto.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class GrantRoleToUserRequestDto {
+    Long roleId;
+    Long userId;
 }

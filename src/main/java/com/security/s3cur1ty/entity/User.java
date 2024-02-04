@@ -1,8 +1,12 @@
 package com.security.s3cur1ty.entity;
-import com.security.s3cur1ty.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,22 +23,26 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String firstName;
-
-    private String lastName;
-
+    private String userName;
     private String email;
-
-    private int token;
-
     private String password;
 
-    @Enumerated(EnumType.STRING)
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private LocalDateTime created_at;
+
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private LocalDateTime updated_at;
+
+    @ManyToOne
     private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return role.getAuthorities().stream().map(authority -> new SimpleGrantedAuthority(authority.getName().name())).toList();
     }
 
     @Override
